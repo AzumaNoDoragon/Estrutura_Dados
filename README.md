@@ -1,0 +1,1 @@
+Este projeto faz parte do meu aprendizado na graduação em Engenharia de Software na UTFPR. Estou registrando meu progresso e consolidando conhecimentos que servirão de base para projetos mais avançados no futuro.
