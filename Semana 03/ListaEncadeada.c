@@ -38,15 +38,55 @@ Lista* inserePos(Lista *l, int v, int j){
 	novo = (Lista*)malloc(sizeof(Lista));
 	novo->info = v;
 	
-	while(i != j){
-		atual = atual->prox;
-		i++;
-	}
-	
-	novo->prox = atual->prox;
-	atual->prox = novo;
-	
+	if (l == NULL) {
+        novo->prox = NULL;
+        return novo;
+    }
+    
+    if (j <= 1) {
+        novo->prox = l;
+        return novo;
+    }
+    
+    while (i < j - 1 && atual->prox != NULL) {
+        atual = atual->prox;
+        i++;
+    }
+    
+    novo->prox = atual->prox;
+    atual->prox = novo;
+
 	return l;
+}
+
+Lista* insereNaTerceiraPos(Lista *l, int v){
+	return inserePos(l, v, 3);
+}
+
+Lista* insereNaQuartaPos(Lista *l, int v){
+	return inserePos(l, v, 4);
+}
+
+Lista* insereOrdenado(Lista *l, int v) {
+    Lista *novo, *ant = NULL, *atual = l;
+
+    novo = (Lista*)malloc(sizeof(Lista));
+    novo->info = v;
+
+    if(l == NULL || v < l->info){
+        novo->prox = l;
+        return novo;
+    }
+
+    while(atual != NULL && atual->info < v){
+        ant = atual;
+        atual = atual->prox;
+    }
+
+    novo->prox = atual;
+    ant->prox = novo;
+
+    return l;
 }
 
 Lista* atribuiFinal(Lista *l, int v){
@@ -72,26 +112,27 @@ void busca(Lista *l, int v){
 	l ? printf("\nBusca de index: %d\n", l->info) : printf("\nNão encontrado!");
 }
 
-Lista* removePos(Lista *l, int v){
-	Lista *p = l, *ant, *aux;
-	
-	while(p != NULL && p->info != v){
-		ant = p;
-		p = p->prox;
-	}
-	if(p){
-		return l;
-	}else{
-		if(p == l){
-			aux = p->prox;
-			free(p);
-			return aux;
-		}else{
-			aux->prox = p->prox;
-			free(p);
-			return l;
-		}
-	}
+Lista* removePos(Lista *l, int v) {
+    Lista *p = l, *ant = NULL;
+
+    while (p != NULL && p->info != v) {
+        ant = p;
+        p = p->prox;
+    }
+
+    if (p == NULL) {
+        return l;
+    }
+
+    if (ant == NULL) {
+        l = p->prox;
+        free(p);
+        return l;
+    }
+
+    ant->prox = p->prox;
+    free(p);
+    return l;
 }
 
 Lista* eliminar(Lista* l){
@@ -109,29 +150,38 @@ int main(int argc, char** argv)
 	l1 = inicializa();
 	apresenta(l1);
 	
-	for(i = 0; i <= 5; i++){
+	for(i = 3; i <= 5; i++){
 		l1 = atribuiFinal(l1, i);
 	}
-	
+	printf("Lista criada\n");
 	apresenta(l1);
 	busca(l1, 5);
 	
-	/*printf("\n");
-	l1 = inserePos(l1, 30, 2);
+	printf("\n");
+	printf("Inserir na 3ª Pos\n");
+	l1 = insereNaTerceiraPos(l1, 6);
 	apresenta(l1);
 	printf("\n");
-	l1 = inserePos(l1, 40, 3);
+	printf("Inserir na 4ª Pos\n");
+	l1 = insereNaQuartaPos(l1, 7);
 	apresenta(l1);
 	
 	printf("\n\n");
-	l1 = removePos(l1, 2);
-	apresenta(l1);*/
+	printf("Remover a 4ª\n");
+	l1 = removePos(l1, 4);
+	apresenta(l1);
+	
+	printf("\n\n");
+	printf("Inserir o 4\n");
+	l1 = insereOrdenado(l1, 4);
+	apresenta(l1);
 	
 	printf("\n\n");
 	l1 = eliminar(l1);
-	if(l1 == NULL)
+	printf("Eliminar\n");
+	if(l1 == NULL){
 		printf("Vazio");
-	//apresenta(l1);
+	}
 	
 	return 0;
 }
