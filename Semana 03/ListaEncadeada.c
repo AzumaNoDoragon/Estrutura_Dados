@@ -1,103 +1,103 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct ponto{
+struct ponto {
 	float x, y;
 };
 typedef struct ponto Ponto;
 
-struct lista{
+struct lista {
 	int info;
-	struct lista *prox;
+	struct lista * prox;
 };
 typedef struct lista Lista;
 
-Lista* inicializa(){
+Lista * inicializa() {
 	return NULL;
 }
 
-void apresenta(Lista *l){
-	if(l != NULL){
-		printf("[%d]->&%p& ", l->info, &l->info);
+void apresenta(Lista * l) {
+	if(l != NULL) {
+		printf("[%d]->&%p& ", l->info, & l->info);
 		apresenta(l->prox);
 	}
 }
 
-Lista* atribuiInicio(Lista* l, int v){
-	Lista* novo;
-	novo = (Lista*)malloc(sizeof(Lista));
+Lista * atribuiInicio(Lista * l, int v) {
+	Lista * novo;
+	novo = (Lista * )malloc(sizeof(Lista));
 	novo->info = v;
 	novo->prox = l;
 	return novo;
 }
 
-Lista* inserePos(Lista *l, int v, int j){
+Lista * inserePos(Lista * l, int v, int j) {
 	int i = 1;
-	Lista *novo, *atual = l;
-	
-	novo = (Lista*)malloc(sizeof(Lista));
+	Lista * novo, * atual = l;
+
+	novo = (Lista * )malloc(sizeof(Lista));
 	novo->info = v;
-	
+
 	if (l == NULL) {
-        novo->prox = NULL;
-        return novo;
-    }
-    
-    if (j <= 1) {
-        novo->prox = l;
-        return novo;
-    }
-    
-    while (i < j - 1 && atual->prox != NULL) {
-        atual = atual->prox;
-        i++;
-    }
-    
-    novo->prox = atual->prox;
-    atual->prox = novo;
+		novo->prox = NULL;
+		return novo;
+	}
+
+	if (j <= 1) {
+		novo->prox = l;
+		return novo;
+	}
+
+	while (i < j - 1 && atual->prox != NULL) {
+		atual = atual->prox;
+		i++;
+	}
+
+	novo->prox = atual->prox;
+	atual->prox = novo;
 
 	return l;
 }
 
-Lista* insereNaTerceiraPos(Lista *l, int v){
+Lista * insereNaTerceiraPos(Lista * l, int v) {
 	return inserePos(l, v, 3);
 }
 
-Lista* insereNaQuartaPos(Lista *l, int v){
+Lista * insereNaQuartaPos(Lista * l, int v) {
 	return inserePos(l, v, 4);
 }
 
-Lista* insereOrdenado(Lista *l, int v) {
-    Lista *novo, *ant = NULL, *atual = l;
+Lista * insereOrdenado(Lista * l, int v) {
+	Lista * novo, * ant = NULL, * atual = l;
 
-    novo = (Lista*)malloc(sizeof(Lista));
-    novo->info = v;
+	novo = (Lista * )malloc(sizeof(Lista));
+	novo->info = v;
 
-    if(l == NULL || v < l->info){
-        novo->prox = l;
-        return novo;
-    }
+	if(l == NULL || v < l->info) {
+		novo->prox = l;
+		return novo;
+	}
 
-    while(atual != NULL && atual->info < v){
-        ant = atual;
-        atual = atual->prox;
-    }
+	while(atual != NULL && atual->info < v) {
+		ant = atual;
+		atual = atual->prox;
+	}
 
-    novo->prox = atual;
-    ant->prox = novo;
+	novo->prox = atual;
+	ant->prox = novo;
 
-    return l;
+	return l;
 }
 
-Lista* atribuiFinal(Lista *l, int v){
-	Lista *novo, *p=l;
-	novo = (Lista*)malloc(sizeof(Lista));
+Lista * atribuiFinal(Lista * l, int v) {
+	Lista * novo, * p = l;
+	novo = (Lista * )malloc(sizeof(Lista));
 	novo->info = v;
 	novo->prox = NULL;
-	if(l == NULL){
+	if(l == NULL) {
 		return novo;
 	} else {
-		while(p->prox!=NULL){
+		while(p->prox != NULL) {
 			p = p->prox;
 		}
 		p->prox = novo;
@@ -105,58 +105,129 @@ Lista* atribuiFinal(Lista *l, int v){
 	}
 }
 
-void busca(Lista *l, int v){
-	while(l != NULL && l->info != v){
+void busca(Lista * l, int v) {
+	while(l != NULL && l->info != v) {
 		l = l->prox;
 	}
 	l ? printf("\nBusca de index: %d\n", l->info) : printf("\nNão encontrado!");
 }
 
-Lista* removePos(Lista *l, int v) {
-    Lista *p = l, *ant = NULL;
+Lista * removePos(Lista * l, int v) {
+	Lista * p = l, * ant = NULL;
 
-    while (p != NULL && p->info != v) {
-        ant = p;
-        p = p->prox;
-    }
+	while (p != NULL && p->info != v) {
+		ant = p;
+		p = p->prox;
+	}
 
-    if (p == NULL) {
-        return l;
-    }
+	if (p == NULL) {
+		return l;
+	}
 
-    if (ant == NULL) {
-        l = p->prox;
-        free(p);
-        return l;
-    }
+	if (ant == NULL) {
+		l = p->prox;
+		free(p);
+		return l;
+	}
 
-    ant->prox = p->prox;
-    free(p);
-    return l;
+	ant->prox = p->prox;
+	free(p);
+	return l;
 }
 
-Lista* eliminar(Lista* l){
-	if(l != NULL){
+Lista * eliminar(Lista * l) {
+	if(l != NULL) {
 		eliminar(l->prox);
 		free(l);
 	}
 	return NULL;
 }
 
-int main(int argc, char** argv)
-{
-	Lista *l1;
+Lista * separa(Lista * l, int n) {
+	Lista * lNovo = NULL;
+	while(l != NULL && l->info != n) {
+		l = l->prox;
+	}
+
+	if(l) {
+		lNovo = l->prox;
+		l->prox = NULL;
+		return lNovo;
+	} else {
+		printf("\nNão encontrado!");
+		return NULL;
+	}
+}
+
+Lista * concatena(Lista * l1, Lista * l2) {
+	if(l1 == NULL)
+		return l2;
+	if(l2 == NULL)
+		return l1;
+
+	Lista * p = l1;
+	while(p->prox != NULL) {
+		p = p->prox;
+	}
+
+	p->prox = l2;
+	return l1;
+}
+
+Lista * constroi(int n, int * v) {
+	if(n <= 0) return NULL;
+
 	int i;
+	Lista * p = NULL, * l = NULL, * novo;
+	for(i = 0; i < n; i++) {
+		novo =  (Lista * )malloc(sizeof(Lista));
+		novo->info = v[i];
+		novo->prox = NULL;
+
+		if(l == NULL) l = novo;
+		else p->prox = novo;
+		p = novo;
+	}
+	return l;
+}
+
+Lista * retiraPrefixo(Lista * l, int n) {
+	Lista * temp;
+	int i;
+
+	for (i = 0; i < n && l != NULL; i++) {
+		temp = l;
+		l = l->prox;
+		free(temp);
+	}
+
+	return l;
+}
+
+int main(int argc, char * * argv) {
+	Lista * l1;
+	int i;
+
 	l1 = inicializa();
-	apresenta(l1);
-	
-	for(i = 3; i <= 5; i++){
+	//l2 = inicializa();
+
+	for(i = 1; i <= 10; i++) {
 		l1 = atribuiFinal(l1, i);
+	}
+	apresenta(l1);
+	l1 = retiraPrefixo(l1, 5);
+	printf("\n\n");
+	apresenta(l1);
+
+	/*
+	int * v, n = 5;
+	v = (int * )malloc(n * sizeof(int));
+	for(i = 0; i < n; i++) {
+		v[i] = i + 1;
 	}
 	printf("Lista criada\n");
 	apresenta(l1);
 	busca(l1, 5);
-	
 	printf("\n");
 	printf("Inserir na 3ª Pos\n");
 	l1 = insereNaTerceiraPos(l1, 6);
@@ -165,23 +236,38 @@ int main(int argc, char** argv)
 	printf("Inserir na 4ª Pos\n");
 	l1 = insereNaQuartaPos(l1, 7);
 	apresenta(l1);
-	
+
 	printf("\n\n");
 	printf("Remover a 4ª\n");
 	l1 = removePos(l1, 4);
 	apresenta(l1);
-	
+
 	printf("\n\n");
 	printf("Inserir o 4\n");
 	l1 = insereOrdenado(l1, 4);
 	apresenta(l1);
-	
+
 	printf("\n\n");
 	l1 = eliminar(l1);
 	printf("Eliminar\n");
 	if(l1 == NULL){
 		printf("Vazio");
 	}
-	
+
+	l2 = separa(l1, 3);
+	printf("\nLista 1:\n");
+	apresenta(l1);
+	printf("\n\nLista 2:\n");
+	apresenta(l2);
+
+	l1 = concatena(l1, l2);
+	printf("\n\nLista Junta:\n");
+	apresenta(l1);
+
+	l1 = constroi(n, v);
+	apresenta(l1);
+
+	*/
+
 	return 0;
 }
