@@ -1,7 +1,5 @@
 import streamlit as st
-from collections import deque
 import json
-from importnb import Notebook
 
 def error(opcao):
     if opcao:
@@ -17,22 +15,21 @@ if uploaded_file:
     dados = json.load(uploaded_file)
     st.sidebar.success("Arquivo carregado com sucesso!")
 
-with Notebook():
-    if opcao == "Projeto Integrado 1":
-        try:
-            import Projeto_integrado_1
-            Projeto_integrado_1.main(opcao, dados)
-        except:
-            error(opcao)
-    elif opcao == "Projeto Integrado 2":
-        try:
-            import Projeto_integrado_2
-            Projeto_integrado_2.main(opcao, dados)
-        except:
-            error(opcao)
-    elif opcao == "Projeto Integrado 3":
-        try:
-            import Projeto_integrado_3
-            Projeto_integrado_3.main(opcao, dados)
-        except:
-            error(opcao)
+if opcao == "Projeto Integrado 1":
+    try:
+        import Projeto_integrado_1
+        Projeto_integrado_1.main(opcao, dados)
+    except:
+        error(opcao)
+elif opcao == "Projeto Integrado 2":
+    try:
+        import Projeto_integrado_2
+        Projeto_integrado_2.main(opcao, dados)
+    except:
+        error(opcao)
+elif opcao == "Projeto Integrado 3":
+    try:
+        import Projeto_integrado_3
+        Projeto_integrado_3.main(opcao, dados)
+    except:
+        error(opcao)
