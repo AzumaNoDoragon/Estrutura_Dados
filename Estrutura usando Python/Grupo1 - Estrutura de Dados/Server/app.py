@@ -7,7 +7,7 @@ def error(opcao):
 
 # ==================== Menu lateral ====================
 st.sidebar.title("Menu de Navegação")
-opcao = st.sidebar.radio("Escolha a página:", ["Projeto Integrado 1", "Projeto Integrado 2", "Projeto Integrado 3"])
+opcao = st.sidebar.radio("Escolha a página:", ["Projeto Integrado 1", "Projeto Integrado 2", "APP_Hotel_Reservations_Completo"])
 
 dados = None
 uploaded_file = st.sidebar.file_uploader("Envie o arquivo JSON", type=["json"])
@@ -27,9 +27,9 @@ elif opcao == "Projeto Integrado 2":
         Projeto_integrado_2.main(opcao, dados)
     except:
         error(opcao)
-elif opcao == "Projeto Integrado 3":
+elif opcao == "APP_Hotel_Reservations_Completo":
     try:
-        import Projeto_integrado_3
-        Projeto_integrado_3.main(opcao, dados)
+        import APP_Hotel_Reservations_Completo
+        APP_Hotel_Reservations_Completo.main(opcao, dados)
     except:
         error(opcao)
