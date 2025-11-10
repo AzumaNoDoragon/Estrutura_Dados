@@ -1,9 +1,8 @@
 import streamlit as st
 import json
 
-def error(opcao):
-    if opcao:
-        st.title("EM DESENVOLVIMENTO!!!")
+def error(e):
+    st.error(f"Erro ao executar: {e}")
 
 # ==================== Menu lateral ====================
 st.sidebar.title("Menu de Navegação")
@@ -19,17 +18,17 @@ if opcao == "Projeto Integrado 1":
     try:
         import Projeto_integrado_1
         Projeto_integrado_1.main(opcao, dados)
-    except:
-        error(opcao)
+    except Exception as e:
+        error(e)
 elif opcao == "Projeto Integrado 2":
     try:
         import Projeto_integrado_2
         Projeto_integrado_2.main(opcao, dados)
-    except:
-        error(opcao)
+    except Exception as e:
+        error(e)
 elif opcao == "APP_Hotel_Reservations_Completo":
     try:
         import APP_Hotel_Reservations_Completo
         APP_Hotel_Reservations_Completo.main(opcao, dados)
-    except:
-        error(opcao)
+    except Exception as e:
+        error(e)
