@@ -1,10 +1,10 @@
 import streamlit as st
 import json
 
-def error(e):
+def error(e) -> str:
+    """Função utilitária para exibir mensagens de erro no app"""
     st.error(f"Erro ao executar: {e}")
 
-# ==================== Menu lateral ====================
 st.sidebar.title("Menu de Navegação")
 opcao = st.sidebar.radio("Escolha a página:", ["Projeto Integrado 1", "Projeto Integrado 2", "APP_Hotel_Reservations_Completo", "Projeto Final"])
 
@@ -14,6 +14,8 @@ if uploaded_file:
     dados = json.load(uploaded_file)
     st.sidebar.success("Arquivo carregado com sucesso!")
 
+# Cada opção importa e executa um módulo diferente.
+# A função 'main()' de cada módulo recebe a opção e os dados carregados.
 if opcao == "Projeto Integrado 1":
     try:
         import Projeto_integrado_1

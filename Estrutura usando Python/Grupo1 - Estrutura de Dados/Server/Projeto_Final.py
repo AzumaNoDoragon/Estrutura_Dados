@@ -28,7 +28,7 @@ def anosMinMax(dados) -> tuple[int, int]:
     return menor_ano, maior_ano
 
 def menu() -> str:
-    """Retorna a escolha feita na aba de opções"""
+    """Exibe o menu de seleção principal dentro de um expander."""
     with st.expander("Mostrar opções"):
         escolha = st.radio(
             "Selecione o que deseja fazer:", [
@@ -43,11 +43,7 @@ def menu() -> str:
 
 ### Funções de estrutura do código ###
 def carregarInfoGerais(dados):
-    """Exibe informações básicas sobre a base de dados: 
-        - 5 primeiras linhas 
-        - Número total de linhas 
-        - Número de colunas 
-        - Lista das colunas principais"""
+    """Exibe informações básicas da base de dados (tamanho, colunas, amostra)."""
     st.subheader("Informações Gerais")
     st.write("Número total de linhas:", len(dados))
     st.write("Número total de colunas:", len(list(dados[0].keys())))
@@ -55,6 +51,7 @@ def carregarInfoGerais(dados):
     st.write("5 primeiras linhas:", dados[:5])
 
 def lista(dados):
+    """Ordena e exibe os jogos mais vendidos utilizando uma lista."""
     nJogos = slideBar(10, 200, 100, 5)
 
     jogosOrganizados = sorted(dados, key=lambda x: float(x["Global_Sales"]), reverse=True)
@@ -66,8 +63,9 @@ def lista(dados):
     st.write("Os jogos mais vendidos foram:", maisVendidos)
 
 def fila(dados):
+    """Permite organizar e visualizar os jogos dentro de uma fila (deque)."""
     def buttonMenu() -> str:
-        """Retorna a escolha feita na aba de opções"""
+        """Submenu interno para escolher o tipo de ordenação"""
         with st.expander("Mostrar opções"):
             escolha = st.radio(
                 "Selecione como deseja organizar:", [
@@ -82,6 +80,7 @@ def fila(dados):
         return escolha
     
     def ordenaPor(chave, ordem, tipo = float):
+        """Função auxiliar para ordenação"""
         try:
             return sorted(filaJogos, key=lambda x: tipo(x[chave]), reverse=ordem)
         except Exception as e:
@@ -93,6 +92,7 @@ def fila(dados):
     
     nJogos = slideBar(5, 100, 50, 5)
 
+    # Criação da fila filtrando jogos pelo ano
     filaJogos = deque()
     for jogo in dados:
         lancado = jogo.get("Year")
@@ -102,6 +102,8 @@ def fila(dados):
                 "Year": jogo["Year"],
                 "Global_Sales": jogo["Global_Sales"]
             })
+
+    # Escolha de ordenação e exibição
     button = buttonMenu()
     if button == "Por vendas globais crescente":
         ordenado = ordenaPor("Global_Sales", False)
@@ -120,13 +122,14 @@ def fila(dados):
     st.write("Os jogos mais vendidos foram:", list(ordenado)[:nJogos])
 
 def tabelaHash(dados):
+    """Simula uma tabela hash simples com inserção e busca de jogos."""
     def inserir(jogo, valor):
         """Insere um par (chave, valor) na tabela."""
         indice = hash(jogo) % nJogos
         tabela[indice].append((jogo, valor))
     
-    def buscar(jogo):
-        """Busca um valor associado à chave."""
+    def buscar(jogo) -> list:
+        """Busca um valor associado à chave (nome do jogo)."""
         indice = hash(jogo) % nJogos
         tabelaJogosEncontrados = []
         for nome, infoJogo in tabela[indice]:
@@ -139,6 +142,7 @@ def tabelaHash(dados):
     
     tabela = [[] for _ in range(nJogos)]
 
+    # Inserção dos jogos na tabela
     for jogo in dados[:nJogos]:
         inserir(
             jogo["Name"],
@@ -150,6 +154,7 @@ def tabelaHash(dados):
             }
         )
     
+    # Busca ou exibição completa
     if nomeJogo:
         resultado = buscar(nomeJogo)
         if resultado:
@@ -166,6 +171,7 @@ def tabelaHash(dados):
         st.write("Jogos inseridos:", nomes)
 
 def BTS(dados):
+    """Cria e exibe uma árvore binária de busca baseada nos N jogos mais vendidos, porem em ordem aleatoria."""
     def insere(raiz, valor, nome):
         """Insere um novo nó na árvore com base em Global_Sales."""
         if raiz is None:
@@ -183,6 +189,7 @@ def BTS(dados):
     jogos_top = jogos_ordenados[:nJogos]
     random.shuffle(jogos_top)
     
+    # Montagem da árvore
     raiz = None
     for jogo in jogos_top:
         valor = float(jogo["Global_Sales"])
@@ -208,13 +215,14 @@ def BTS(dados):
         st.error("Não foi possível construir a árvore. Verifique o formato dos dados.")
 
 def main(opcao, dados):
+    """Executa a lógica da aba 'Projeto Final' conforme a escolha do usuário."""
     if opcao != "Projeto Final":
         return
 
     st.title("Projeto Final")
-    '''if dados is None:
+    if dados is None:
         st.warning("Por favor, carregue o arquivo no menu lateral.")
-        return'''
+        return
     escolha = menu()
 
     if escolha == "Informações Gerais":
