@@ -2,6 +2,7 @@ import streamlit as st
 from binarytree import Node
 from collections import deque
 import random
+import matplotlib.pyplot as plt
 
 ### Funções de inicialização e modularização do código ###
 def slideBar(min, max, value, stepMove, text = "Escolha a quantidade de jogos:") -> tuple[int, int, int]:
@@ -140,11 +141,10 @@ def tabelaHash(dados):
             if nome == jogo:
                 tabelaJogosEncontrados.append((nome, infoJogo))
         return tabelaJogosEncontrados
-
+    
     tamHash = slideBar(100, 1000, 300, 5, "Tamanho da hash")
-    nJogos = slideBar(100, len(dados), 2500, 5)
-    nomeJogo = st.text_input("Nome do jogo:", placeholder="Digite o nome exato do jogo")
-
+    nJogos = slideBar(100, len(dados), min(2500, len(dados)), 5)
+    
     tabela = [[] for _ in range(tamHash)]
     colisoes = 0
 
@@ -159,9 +159,19 @@ def tabelaHash(dados):
                 "Global_Sales": jogo["Global_Sales"],
             }
         )
-    
-    st.write("Quantidade de colisões:", colisoes)  
+
+    with st.expander("Informações adicionais"):
+        st.write("Quantidade de colisões:", colisoes)
+        st.write("Fator de carga:", round(nJogos / tamHash, 2))
+        maior_bucket = max(tabela, key=lambda b: len(b))
+        st.write("Tamanho do maior bucket:", len(maior_bucket))
+        with st.expander("Mostrar maior bucket"):
+            indice_maior_bucket = tabela.index(maior_bucket)
+            st.write("Índice do maior bucket:", indice_maior_bucket)
+            st.write(maior_bucket)
+
     # Busca ou exibição completa
+    nomeJogo = st.text_input("Nome do jogo:", placeholder="Digite o nome exato do jogo")
     if nomeJogo:
         resultado = buscar(nomeJogo)
         if resultado:
@@ -170,7 +180,6 @@ def tabelaHash(dados):
         else:
             st.warning("Jogo não encontrado.")
     else:
-        
         st.subheader("Todos os jogos na tabela hash:")
         nomes = []
         for bucket in tabela:
@@ -213,12 +222,11 @@ def BTS(dados):
         raiz = insere(raiz, valor, nome)
     
     if raiz:
-        st.subheader("Visualização da Árvore Binária de Busca (BST)")
-        st.graphviz_chart(raiz.graphviz())
-        
         folhas = contar_folhas(raiz)
         st.write(f"**Quantidade de nós folha:** {folhas}")
         st.write(f"**Altura da árvore:** {raiz.height}")
+        st.subheader("Visualização da Árvore Binária de Busca (BST)")
+        st.graphviz_chart(raiz.graphviz())
     else:
         st.error("Não foi possível construir a árvore. Verifique o formato dos dados.")
 
