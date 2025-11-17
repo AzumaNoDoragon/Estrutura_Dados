@@ -18,25 +18,25 @@ if uploaded_file:
 # A função 'main()' de cada módulo recebe a opção e os dados carregados.
 if opcao == "Projeto Integrado 1":
     try:
-        import Projeto_integrado_1
-        Projeto_integrado_1.main(opcao, dados)
+        import Projeto.Projeto_integrado_1
+        Projeto.Projeto_integrado_1.main(opcao, dados)
     except Exception as e:
         error(e)
 elif opcao == "Projeto Integrado 2":
     try:
-        import Projeto_integrado_2
-        Projeto_integrado_2.main(opcao, dados)
+        import Projeto.Projeto_integrado_2
+        Projeto.Projeto_integrado_2.main(opcao, dados)
     except Exception as e:
         error(e)
 elif opcao == "APP_Hotel_Reservations_Completo":
     try:
-        import APP_Hotel_Reservations_Completo
-        APP_Hotel_Reservations_Completo.main(opcao, dados)
+        import Projeto.APP_Hotel_Reservations_Completo
+        Projeto.APP_Hotel_Reservations_Completo.main(opcao, dados)
     except Exception as e:
         error(e)
 elif opcao == "Projeto Final":
     try:
-        import Projeto_Final
-        Projeto_Final.main(opcao, dados)
+        import Projeto.Projeto_Final
+        Projeto.Projeto_Final.main(opcao, dados)
     except Exception as e:
         error(e)
