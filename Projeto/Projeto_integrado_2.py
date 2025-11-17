@@ -3,7 +3,6 @@ from binarytree import Node
 import re
 
 # ======== Funções auxiliares ========
-
 def limpar_numero(valor):
     """Converte texto como para inteiro."""
     if isinstance(valor, str):
@@ -12,7 +11,6 @@ def limpar_numero(valor):
             return None
         return int(valor)
     return valor
-
 
 def inserir(raiz, valor):
     """Insere um valor numérico na árvore binária de busca (BST)."""
@@ -23,7 +21,6 @@ def inserir(raiz, valor):
     else:
         raiz.right = inserir(raiz.right, valor)
     return raiz
-
 
 def construir_arvore(dados, chave, limite):
     """Constroi uma árvore binária de busca com base em uma chave (streams, danceability_%, energy_%) e limite de músicas."""

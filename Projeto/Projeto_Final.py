@@ -123,28 +123,34 @@ def fila(dados):
 
 def tabelaHash(dados):
     """Simula uma tabela hash simples com inserção e busca de jogos."""
-    def inserir(jogo, valor):
+    def inserir(jogo, valor) -> int:
         """Insere um par (chave, valor) na tabela."""
-        indice = hash(jogo) % nJogos
+        colisoes = 0
+        indice = hash(jogo) % tamHash
+        if tabela[indice]:
+            colisoes += 1
         tabela[indice].append((jogo, valor))
+        return colisoes
     
     def buscar(jogo) -> list:
         """Busca um valor associado à chave (nome do jogo)."""
-        indice = hash(jogo) % nJogos
+        indice = hash(jogo) % tamHash
         tabelaJogosEncontrados = []
         for nome, infoJogo in tabela[indice]:
             if nome == jogo:
                 tabelaJogosEncontrados.append((nome, infoJogo))
         return tabelaJogosEncontrados
 
-    nJogos = slideBar(100, 1000, 300, 5)
+    tamHash = slideBar(100, 1000, 300, 5, "Tamanho da hash")
+    nJogos = slideBar(100, len(dados), 2500, 5)
     nomeJogo = st.text_input("Nome do jogo:", placeholder="Digite o nome exato do jogo")
-    
-    tabela = [[] for _ in range(nJogos)]
+
+    tabela = [[] for _ in range(tamHash)]
+    colisoes = 0
 
     # Inserção dos jogos na tabela
     for jogo in dados[:nJogos]:
-        inserir(
+        colisoes += inserir(
             jogo["Name"],
             { 
                 "Platform": jogo["Platform"],
@@ -154,6 +160,7 @@ def tabelaHash(dados):
             }
         )
     
+    st.write("Quantidade de colisões:", colisoes)  
     # Busca ou exibição completa
     if nomeJogo:
         resultado = buscar(nomeJogo)
@@ -163,6 +170,7 @@ def tabelaHash(dados):
         else:
             st.warning("Jogo não encontrado.")
     else:
+        
         st.subheader("Todos os jogos na tabela hash:")
         nomes = []
         for bucket in tabela:
@@ -183,15 +191,23 @@ def BTS(dados):
         else:
             raiz.right = insere(raiz.right, valor, nome)
         return raiz
+    
+    # Contar nós folha
+    def contar_folhas(no):
+        if no is None:
+            return 0
+        if no.left is None and no.right is None:
+            return 1
+        return contar_folhas(no.left) + contar_folhas(no.right)
 
     nJogos = slideBar(5, 30, 15, 5)
-    jogos_ordenados = sorted(dados, key=lambda x: float(x["Global_Sales"]), reverse=True)
-    jogos_top = jogos_ordenados[:nJogos]
-    random.shuffle(jogos_top)
+    jogosOrdenados = sorted(dados, key=lambda x: float(x["Global_Sales"]), reverse=True)
+    jogosTop = jogosOrdenados[:nJogos]
+    random.shuffle(jogosTop)
     
     # Montagem da árvore
     raiz = None
-    for jogo in jogos_top:
+    for jogo in jogosTop:
         valor = float(jogo["Global_Sales"])
         nome = jogo["Name"]
         raiz = insere(raiz, valor, nome)
@@ -199,14 +215,6 @@ def BTS(dados):
     if raiz:
         st.subheader("Visualização da Árvore Binária de Busca (BST)")
         st.graphviz_chart(raiz.graphviz())
-
-        # Contar nós folha
-        def contar_folhas(no):
-            if no is None:
-                return 0
-            if no.left is None and no.right is None:
-                return 1
-            return contar_folhas(no.left) + contar_folhas(no.right)
         
         folhas = contar_folhas(raiz)
         st.write(f"**Quantidade de nós folha:** {folhas}")
