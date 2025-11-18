@@ -2,7 +2,6 @@ import streamlit as st
 from binarytree import Node
 from collections import deque
 import random
-import matplotlib.pyplot as plt
 
 ### Funções de inicialização e modularização do código ###
 def slideBar(min, max, value, stepMove, text = "Escolha a quantidade de jogos:") -> tuple[int, int, int]:
